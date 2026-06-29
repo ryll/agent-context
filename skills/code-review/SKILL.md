@@ -21,7 +21,7 @@ Review the **entire** project directory, providing an overview that explicitly c
 1. List all top-level directories and files, as well as all directories and files within the main source folder.
 2. **Check `.gitignore` (or equivalent ignore files) first** and skip any ignored files/folders.
 3. Check that directory and file names follow a consistent convention appropriate for the project's language and framework (e.g., snake_case for Python, camelCase/PascalCase for TS/JS, lowercase-with-hyphens for non-code folders).
-4. Flag misplaced files, unclear names, or structural inconsistencies.
+4. Flag misplaced files, unclear names, or structural inconsistencies. Verify that functions, classes, and helper logic are located in files that align with their semantic purpose. Flag cases where utilities or low-level operations are defined within orchestrating scripts.
 5. Only primary source files are reviewed for deep code quality. Scripts outside the main source directory are **not** subject to code review, but their names and placement are still checked here.
 
 #### Phase 2 — Incremental, Batch-Based Code Reading
@@ -39,6 +39,8 @@ For every function/class found in Phase 2, evaluate:
 - Code duplication — use `grep_search` to look for repeated imports, helpers, config reading, and common patterns across files.
 - Dead code or unnecessary defensive checks.
 - Modularity and coupling.
+- **Code Placement & Structural Alignment**: Evaluate if functions or classes are defined in the correct architectural layer. Orchestration entrypoints (like CLI commands, web route handlers, or UI controllers) should not contain low-level utilities, configuration loading, or I/O logic. Flag code that is out-of-place and recommend moving it to dedicated utility or domain-specific modules.
+  * *Example*: Functions like `load_judges_config` or storage-collision directory checks do not belong directly inside a CLI runner (like `setup_benchmark.py`); they should be extracted to utility modules (such as `utils/config_loaders` or `utils/io`).
 
 #### Phase 4 — Self-Correction
 Before completing the review, verify the function/class checklist from Phase 2 to ensure absolutely no item was skipped.
