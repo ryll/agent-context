@@ -7,7 +7,7 @@ description: Trigger this skill when you want to draft a commit message for curr
 Inspect staged files, generate a git commit message following Conventional Commits and matching the style of previous repository commits, and commit the staged changes.
 
 ### Instructions
-1. Run `git status` to verify there are staged changes ready for commit.
+1. Run `git status` to verify there are staged changes ready for commit. If no changes are staged, stop execution, explain to the user that changes must be staged first, and do not attempt to run `git add` or stage files yourself.
 2. Run `git diff --cached` to inspect the contents of the staged changes.
 3. Run `git log -n 5 --oneline` to analyze the naming and formatting style of recent commit messages in the repository.
 4. Draft a commit message (e.g., `feat: ...`, `refactor: ...`, `chore: ...`) matching the style and type tags from the history.
@@ -47,3 +47,5 @@ Inspect staged files, generate a git commit message following Conventional Commi
 - The commit message must strictly match the Conventional Commits type prefixes (e.g. `refactor:`, `chore:`, `feat:`, `fix:`) present in the git log history.
 - The first line of the commit message must never exceed 72 characters.
 - Never push changes automatically.
+- Never stage files or run `git add`. Only work with already staged changes.
+- If no changes are staged, halt execution immediately and notify the user to stage their files.
