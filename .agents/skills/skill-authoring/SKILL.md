@@ -10,7 +10,7 @@ Guide the agent to generate or update Antigravity skills and rule directories th
 
 1. **Target Location Identification**:
    - If the user has not specified where the skill should be located, stop and ask the user whether it should be:
-     - **Global**: `~/.gemini/config/skills/` (accessible across all projects)
+     - **Global**: `~/home/ryll/coding/agent-context/.agents/skills/` (accessible across all projects through symlinks)
      - **Project-specific**: `.agents/skills/` (relative to the current workspace root)
    - Do not write any files until the directory location is confirmed.
 
