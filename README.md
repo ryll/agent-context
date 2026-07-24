@@ -11,5 +11,5 @@ mkdir -p .agents/skills
 ln -s ~/coding/agent-context/.agents/skills/code-review .agents/skills/code-review
 
 # Example 2: Link the full skills directory globally to Gemini config
-ln -s ~/coding/agent-context/.agents/skills ~/.gemini/config/skills
+ln -s ~/coding/agent-context/.agents/skills ~/.gemini/config/
 ```
