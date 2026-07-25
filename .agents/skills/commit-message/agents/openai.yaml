@@ -1,0 +1,3 @@
+interface:
+  display_name: "Commit Message"
+  short_description: "Draft and commit a history-consistent Conventional Commit."

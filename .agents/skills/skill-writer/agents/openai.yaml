@@ -1,0 +1,3 @@
+interface:
+  display_name: "Skill Writer"
+  short_description: "Create and improve reusable agent skills."

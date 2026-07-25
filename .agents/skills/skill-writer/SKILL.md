@@ -1,5 +1,5 @@
 ---
-name: skill-creator
+name: skill-writer
 description: Create, update, or improve reusable agent skills. Use when a user wants to capture specialized knowledge, a repeatable workflow, or reliable tool usage in a SKILL.md-based skill.
 ---
 
