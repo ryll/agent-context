@@ -1,10 +1,25 @@
 ---
 name: code-review
-description: Trigger this skill when the user asks for a comprehensive code review of the project or a specific directory to ensure clean, modular, and production-ready code.
+description: Perform an architectural code review of a project or directory, focused exclusively on structure, module boundaries, responsibilities, dependencies, coupling, cohesion, and maintainability. Use when the user asks for a code review, architecture review, structural review, or an assessment of how clearly a codebase is organized. Do not perform linting, formatting, type checking, or other line-level style analysis.
 ---
 
 ### Goal
-Perform a critical, professional, and thorough code review of the target directory (either the specific directory supplied by the user, or the full project if no directory is specified) and analyze its structure and naming to ensure clean, modular, easily maintainable, and production-ready code.
+Perform a critical, professional architectural review of the target directory. Assess whether the codebase has a clear, coherent, modular, and maintainable structure.
+
+This is an **architectural review only**. Review implementation details only as needed to understand responsibilities, boundaries, dependencies, and data/control flow.
+
+### Hard Scope Boundary
+
+Do **not** check, run, or report on:
+
+- Linting or linter violations.
+- Formatting, whitespace, indentation, line length, or import ordering.
+- Type-checker results or type annotation completeness.
+- Line-level style preferences.
+- Minor naming or implementation details that do not affect architectural clarity.
+- Tests, builds, linters, formatters, or type checkers solely to assess code quality.
+
+If such issues are encountered incidentally, omit them from the report unless they directly cause a structural or architectural problem. Do not present the absence of these checks as a review gap.
 
 ### Instructions
 
@@ -13,38 +28,52 @@ Determine the target directory for the review:
   - If the user specified a directory along with the skill invocation, use that directory as the target directory.
   - If the user did not specify a directory, target the entire project directory.
 
-#### Phase 1 — Structure & Naming
-Review the target directory structure and naming conventions. Provide a clear overview or folder structure graph.
+#### Phase 1 — Structural Overview
+Review the target directory structure and provide a clear overview or folder structure graph.
 
 1. List the contents of the target directory.
 2. **Check `.gitignore` (or equivalent ignore files) first** and skip any ignored files/folders.
-3. Check that directory and file names within the target directory follow a consistent convention appropriate for the project's language and framework.
-4. Flag misplaced files, unclear names, or structural inconsistencies. Verify that functions, classes, and helper logic are located in files that align with their semantic purpose. Flag cases where utilities or low-level operations are defined within orchestrating scripts.
-5. Only code files inside the target directory are reviewed for deep code quality. Other scripts or configuration files outside the target directory are not subject to deep code review, though their placement may be flagged if relevant.
+3. Identify the major components, layers, entry points, shared modules, and dependency direction.
+4. Flag misplaced files, unclear module responsibilities, structural inconsistencies, and names that obscure a component's architectural role.
+5. Review files outside the target directory only when needed to understand an in-scope architectural dependency.
 
-#### Phase 2 — Incremental, Batch-Based Code Reading
-Do **not** read all files at once. Read the code files inside the target directory in logical batches grouped by directory structure to maintain context.
+#### Phase 2 — Architecture Mapping
+Read code in logical batches grouped by component or directory. Read enough implementation to map:
 
-For each batch, list the defined classes and functions. Maintain a running checklist of every function/class so you can verify none were skipped.
+- Module and layer responsibilities.
+- Dependency direction and cross-module relationships.
+- Public interfaces and ownership of shared concepts.
+- Data flow, control flow, and orchestration boundaries.
+- Extension points and areas where changes would have broad impact.
 
-#### Phase 3 — Manual Code Review
-For every function/class found in Phase 2, evaluate:
+Do not inventory or review every function and class unless necessary to establish architectural coverage.
 
-- Naming of files, classes, functions, and variables. Do they clearly convey their purpose and intent?
-- Correctness and clarity of logic.
-- Can this code be written in a simpler or less complex way? Avoid overengineering.
-- Code duplication — use `grep_search` to look for repeated imports, helpers, config reading, and common patterns across files.
-- Dead code or unnecessary defensive checks.
-- Modularity and coupling.
-- Evaluate if functions or classes are defined in the correct architectural layer. Flag code that is out-of-place and recommend moving it to dedicated utility or domain-specific modules.
+#### Phase 3 — Architectural Evaluation
+Evaluate:
 
-#### Phase 4 — Self-Correction
-Before completing the review, verify the function/class checklist from Phase 2 to ensure absolutely no item was skipped.
+- Whether components have clear, cohesive responsibilities.
+- Whether module and layer boundaries are explicit and respected.
+- Coupling, dependency cycles, inappropriate dependency direction, and hidden global dependencies.
+- Separation of domain logic, orchestration, infrastructure, presentation, and shared utilities where applicable.
+- Whether abstractions simplify the design or add unnecessary indirection.
+- Whether duplicated architectural concepts indicate missing ownership or boundaries.
+- Whether files, classes, or functions live in the correct component or layer.
+- Whether the structure makes common changes easy to locate, reason about, test, and implement without unrelated impact.
+- Whether architectural naming clearly communicates component roles and relationships.
+
+Prioritize issues by architectural impact and explain the concrete maintenance or changeability risk. Recommend the smallest durable structural improvement that addresses each issue.
+
+#### Phase 4 — Coverage Check
+Before completing the review, verify that every major in-scope component, layer, entry point, and important dependency relationship was considered. Do not use line-level or symbol-level coverage as the completeness criterion.
 
 #### Phase 5 — Output Generation
-Format the final report as a concise markdown artifact containing:
+Write the final report to `CODE_REVIEW.md` in the current project root. Format it as a concise markdown artifact containing:
 
-1. **Folder Structure & Naming** — assessment of the target directory structure and naming conventions.
-2. **Module-by-Module Review** — tables per file. **Only include functions/classes that need changes.**
-3. **High-Level Architectural Recommendations**.
+1. **Architecture Overview** — major components, responsibilities, boundaries, and dependency flow.
+2. **Architectural Findings** — only structural issues that need changes, prioritized by impact and supported with file/module evidence.
+3. **Architectural Strengths** — structural choices that are clear and worth preserving.
+4. **Recommended Improvements** — focused, durable changes ordered by priority.
 
+Do not include linting, formatting, type-checking, line-level style, or other non-architectural findings.
+
+After writing the file, briefly tell the user that the review was saved to `CODE_REVIEW.md`.

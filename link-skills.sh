@@ -9,6 +9,7 @@ home_dir=${HOME:?HOME is not set}
 target_dirs=(
     "$home_dir/.codex/skills"
     "$home_dir/.gemini/config/skills"
+    "$home_dir/.claude/skills"
 )
 
 for target_dir in "${target_dirs[@]}"; do
