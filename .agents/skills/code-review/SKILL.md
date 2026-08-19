@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Perform an architectural code review of a project or directory, focused exclusively on structure, module boundaries, responsibilities, dependencies, coupling, cohesion, and maintainability. Use when the user asks for a code review, architecture review, structural review, or an assessment of how clearly a codebase is organized. Do not perform linting, formatting, type checking, or other line-level style analysis.
+description: Perform an architectural code review of a project or directory and write the required report to CODE_REVIEW.md in the project root. Use when the user asks for a code review, architecture review, structural review, or an assessment of structure, module boundaries, responsibilities, dependencies, coupling, cohesion, or maintainability. Do not perform linting, formatting, type checking, or other line-level style analysis.
 ---
 
 ### Goal
